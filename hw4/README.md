@@ -1,4 +1,4 @@
-# HW 3: minbert
+# HW 4: minbert
 by Shuyan Zhou, Zhengbao Jiang, Ritam Dutt and Brendon Boldt
 
 This is an exercise in developing a minimalist version of BERT, adapted from CMU's [CS11-747: Neural Networks for NLP](http://www.phontron.com/class/nn4nlp2020/).
