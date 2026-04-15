@@ -143,6 +143,26 @@ def model_eval(dataloader, model, device):
 
     return acc, f1, y_pred, y_true, sents
 
+def get_warmup_steps(args, total_training_steps):
+    if args.warmup_steps > 0:
+        return min(args.warmup_steps, total_training_steps)
+    return int(total_training_steps * args.warmup_ratio)
+
+def get_linear_warmup_lr(base_lr, current_step, num_warmup_steps, num_training_steps):
+    if num_training_steps <= 0:
+        return base_lr
+
+    if num_warmup_steps > 0 and current_step <= num_warmup_steps:
+        return base_lr * float(current_step) / float(max(1, num_warmup_steps))
+
+    decay_steps = max(1, num_training_steps - num_warmup_steps)
+    remaining_steps = max(0, num_training_steps - current_step)
+    return base_lr * float(remaining_steps) / float(decay_steps)
+
+def set_optimizer_lr(optimizer, lr):
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
+
 def save_model(model, optimizer, args, config, filepath):
     save_info = {
         'model': model.state_dict(),
@@ -187,8 +207,15 @@ def train(args):
 
     lr = args.lr
     ## specify the optimizer
-    optimizer = AdamW(model.parameters(), lr=lr)
+    optimizer = AdamW(model.parameters(), lr=lr, weight_decay=args.weight_decay)
     best_dev_acc = 0
+    total_training_steps = len(train_dataloader) * args.epochs
+    warmup_steps = get_warmup_steps(args, total_training_steps)
+    global_step = 0
+
+    if warmup_steps > 0:
+        set_optimizer_lr(optimizer, 0.0)
+        print(f"using linear warmup/decay schedule with {warmup_steps} warmup steps over {total_training_steps} total steps")
 
     ## run for the specified number of epochs
     for epoch in range(args.epochs):
@@ -208,6 +235,12 @@ def train(args):
             loss = F.nll_loss(logits, b_labels.view(-1), reduction='sum') / args.batch_size
 
             loss.backward()
+
+            global_step += 1
+            if warmup_steps > 0:
+                step_lr = get_linear_warmup_lr(lr, global_step, warmup_steps, total_training_steps)
+                set_optimizer_lr(optimizer, step_lr)
+
             optimizer.step()
 
             train_loss += loss.item()
@@ -222,7 +255,8 @@ def train(args):
             best_dev_acc = dev_acc
             save_model(model, optimizer, args, config, args.filepath)
 
-        print(f"epoch {epoch}: train loss :: {train_loss :.3f}, train acc :: {train_acc :.3f}, dev acc :: {dev_acc :.3f}")
+        current_lr = optimizer.param_groups[0]['lr']
+        print(f"epoch {epoch}: train loss :: {train_loss :.3f}, train acc :: {train_acc :.3f}, dev acc :: {dev_acc :.3f}, lr :: {current_lr :.8f}")
 
 
 def test(args):
@@ -276,6 +310,12 @@ def get_args():
     parser.add_argument("--hidden_dropout_prob", type=float, default=0.3)
     parser.add_argument("--lr", type=float, help="learning rate, default lr for 'pretrain': 1e-3, 'finetune': 1e-5",
                         default=1e-5)
+    parser.add_argument("--warmup_ratio", type=float, default=0.0,
+                        help="fraction of total training steps used for linear warmup before linear decay")
+    parser.add_argument("--warmup_steps", type=int, default=0,
+                        help="explicit number of warmup steps; overrides warmup_ratio when > 0")
+    parser.add_argument("--weight_decay", type=float, default=0.0,
+                        help="decoupled weight decay used by AdamW")
 
     args = parser.parse_args()
     print(f"args: {vars(args)}")
