@@ -3,9 +3,10 @@ CAMPUSID='9087144227'
 mkdir -p $CAMPUSID
 
 # Step 1. (Optional) Any preprocessing step, e.g., downloading pre-trained word embeddings
-python setup.py
 # wget https://nlp.stanford.edu/data/wordvecs/glove.2024.dolma.300d.zip
 # unzip glove.2024.dolma.300d.zip
+python setup.py
+
 
 # Step 2. Train models on two datasets.
 ##  2.1. Run experiments on SST

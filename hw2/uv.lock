@@ -111,45 +111,6 @@ wheels = [
 ]
 
 [[package]]
-name = "cs336-basics"
-version = "1.0.6"
-source = { editable = "." }
-dependencies = [
-    { name = "einops" },
-    { name = "einx" },
-    { name = "jaxtyping" },
-    { name = "numpy" },
-    { name = "psutil" },
-    { name = "pytest" },
-    { name = "regex" },
-    { name = "submitit" },
-    { name = "tiktoken" },
-    { name = "torch", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine == 'x86_64' and sys_platform == 'darwin'" },
-    { name = "torch", version = "2.6.0", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine != 'x86_64' or sys_platform != 'darwin'" },
-    { name = "tqdm" },
-    { name = "ty" },
-    { name = "wandb" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "einops", specifier = ">=0.8.1" },
-    { name = "einx", specifier = ">=0.3.0" },
-    { name = "jaxtyping", specifier = ">=0.3.0" },
-    { name = "numpy" },
-    { name = "psutil", specifier = ">=6.1.1" },
-    { name = "pytest", specifier = ">=8.3.4" },
-    { name = "regex", specifier = ">=2024.11.6" },
-    { name = "submitit", specifier = ">=1.5.2" },
-    { name = "tiktoken", specifier = ">=0.9.0" },
-    { name = "torch", marker = "platform_machine != 'x86_64' or sys_platform != 'darwin'", specifier = "~=2.6.0" },
-    { name = "torch", marker = "platform_machine == 'x86_64' and sys_platform == 'darwin'", specifier = "~=2.2.2" },
-    { name = "tqdm", specifier = ">=4.67.1" },
-    { name = "ty", specifier = ">=0.0.1a16" },
-    { name = "wandb", specifier = ">=0.19.7" },
-]
-
-[[package]]
 name = "einops"
 version = "0.8.1"
 source = { registry = "https://pypi.org/simple" }
@@ -223,6 +184,45 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/9a/c8/dd58967d119baab745caec2f9d853297cec1989ec1d63f677d3880632b88/gitpython-3.1.45.tar.gz", hash = "sha256:85b0ee964ceddf211c41b9f27a49086010a190fd8132a24e21f362a4b36a791c", size = 215076, upload-time = "2025-07-24T03:45:54.871Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/01/61/d4b89fec821f72385526e1b9d9a3a0385dda4a72b206d28049e2c7cd39b8/gitpython-3.1.45-py3-none-any.whl", hash = "sha256:8908cb2e02fb3b93b7eb0f2827125cb699869470432cc885f019b8fd0fccff77", size = 208168, upload-time = "2025-07-24T03:45:52.517Z" },
+]
+
+[[package]]
+name = "hw2"
+version = "1.0.6"
+source = { editable = "." }
+dependencies = [
+    { name = "einops" },
+    { name = "einx" },
+    { name = "jaxtyping" },
+    { name = "numpy" },
+    { name = "psutil" },
+    { name = "pytest" },
+    { name = "regex" },
+    { name = "submitit" },
+    { name = "tiktoken" },
+    { name = "torch", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine == 'x86_64' and sys_platform == 'darwin'" },
+    { name = "torch", version = "2.6.0", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine != 'x86_64' or sys_platform != 'darwin'" },
+    { name = "tqdm" },
+    { name = "ty" },
+    { name = "wandb" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "einops", specifier = ">=0.8.1" },
+    { name = "einx", specifier = ">=0.3.0" },
+    { name = "jaxtyping", specifier = ">=0.3.0" },
+    { name = "numpy" },
+    { name = "psutil", specifier = ">=6.1.1" },
+    { name = "pytest", specifier = ">=8.3.4" },
+    { name = "regex", specifier = ">=2024.11.6" },
+    { name = "submitit", specifier = ">=1.5.2" },
+    { name = "tiktoken", specifier = ">=0.9.0" },
+    { name = "torch", marker = "platform_machine != 'x86_64' or sys_platform != 'darwin'", specifier = "~=2.6.0" },
+    { name = "torch", marker = "platform_machine == 'x86_64' and sys_platform == 'darwin'", specifier = "~=2.2.2" },
+    { name = "tqdm", specifier = ">=4.67.1" },
+    { name = "ty", specifier = ">=0.0.1a16" },
+    { name = "wandb", specifier = ">=0.19.7" },
 ]
 
 [[package]]
