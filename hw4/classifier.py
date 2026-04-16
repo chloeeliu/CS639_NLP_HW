@@ -177,6 +177,13 @@ def save_model(model, optimizer, args, config, filepath):
     torch.save(save_info, filepath)
     print(f"save the model to {filepath}")
 
+def load_checkpoint(filepath, device):
+    load_kwargs = {'map_location': device}
+    try:
+        return torch.load(filepath, weights_only=False, **load_kwargs)
+    except TypeError:
+        return torch.load(filepath, **load_kwargs)
+
 def train(args):
     device = torch.device('cuda') if args.use_gpu else torch.device('cpu')
     #### Load data
@@ -262,7 +269,7 @@ def train(args):
 def test(args):
     with torch.no_grad():
         device = torch.device('cuda') if args.use_gpu else torch.device('cpu')
-        saved = torch.load(args.filepath)
+        saved = load_checkpoint(args.filepath, device)
         config = saved['model_config']
         model = BertSentClassifier(config)
         model.load_state_dict(saved['model'])
